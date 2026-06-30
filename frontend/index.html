@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShambaSense Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <header class="topbar">
+    <h1>ShambaSense</h1>
+    <div class="device-status">
+      <span id="statusDot" class="dot offline"></span>
+      <span id="statusText">Checking device…</span>
+      <span id="lastUpdated">Last updated: --</span>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Latest readings -->
+    <section class="stat-cards">
+      <div class="card">
+        <p class="card-label">Temperature</p>
+        <p class="card-value"><span id="tempValue">--</span> °C</p>
+      </div>
+      <div class="card">
+        <p class="card-label">Humidity</p>
+        <p class="card-value"><span id="humidityValue">--</span> %</p>
+      </div>
+      <div class="card">
+        <p class="card-label">Soil Moisture</p>
+        <p class="card-value"><span id="soilValue">--</span> %</p>
+        <p class="card-sub" id="soilStatus">--</p>
+      </div>
+    </section>
+
+    <!-- Date range filter -->
+    <section class="filter-bar">
+      <label for="rangeSelect">Show:</label>
+      <select id="rangeSelect">
+        <option value="today">Today</option>
+        <option value="7days" selected>Last 7 Days</option>
+        <option value="30days">Last 30 Days</option>
+      </select>
+    </section>
+
+    <!-- Trend charts -->
+    <section class="charts">
+      <div class="chart-box">
+        <h3>Temperature &amp; Humidity Trend</h3>
+        <canvas id="climateChart"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Soil Moisture Trend</h3>
+        <canvas id="soilChart"></canvas>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/mockData.js"></script>
+  <script src="js/dataService.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

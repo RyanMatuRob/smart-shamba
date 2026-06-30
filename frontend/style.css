@@ -1,0 +1,116 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f4f6f5;
+  color: #1f2d22;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1f6b3a;
+  color: white;
+  padding: 16px 24px;
+}
+
+.topbar h1 {
+  font-size: 1.4rem;
+}
+
+.device-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot.online {
+  background: #4caf50;
+}
+
+.dot.offline {
+  background: #d9534f;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.card {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.card-label {
+  font-size: 0.85rem;
+  color: #6b7a70;
+  margin-bottom: 6px;
+}
+
+.card-value {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1f6b3a;
+}
+
+.card-sub {
+  margin-top: 4px;
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.filter-bar {
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+}
+
+.filter-bar select {
+  margin-left: 8px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.chart-box {
+  background: white;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.chart-box h3 {
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+  color: #2d3b32;
+}
