@@ -1,3 +1,5 @@
+import DataService from "./dataService.js";
+
 function soilStatusLabel(value) {
   if (value < 30) return "Dry — irrigation may be needed";
   if (value <= 60) return "Optimal";

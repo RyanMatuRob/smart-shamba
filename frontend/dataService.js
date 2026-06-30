@@ -1,11 +1,11 @@
 /**
  * dataService.js
  * --------------
- * This is the ONLY file that should change once the backend team's
- * Firebase (or other) database is ready. Every other file just calls
- * these functions and doesn't care where the data actually comes from.
+ * Live Firebase Realtime Database version (modular SDK).
+ * Every other file just calls these functions and doesn't care
+ * where the data actually comes from.
  *
- * API CONTRACT (agree this with backend team):
+ * API CONTRACT (agreed with backend team):
  * {
  *   deviceId: string,
  *   timestamp: ISO 8601 string,
@@ -13,24 +13,41 @@
  *   humidity: number (%),
  *   soilMoisture: number (%)
  * }
+ *
+ * Set USE_MOCK_DATA to true to fall back to mockData.js if Firebase
+ * isn't returning data yet (e.g. firmware not pushing readings yet).
  */
+
+import { db } from "./firebaseConfig.js";
+import {
+  ref,
+  query,
+  orderByChild,
+  limitToLast,
+  startAt,
+  get
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-database.js";
+
+const USE_MOCK_DATA = false; // flip to true to test the UI without live data
 
 const DataService = {
 
   // Returns the most recent reading
   async getLatestReading() {
-    // --- MOCK VERSION (current) ---
-    const readings = MOCK_READINGS;
-    return readings[readings.length - 1];
+    if (USE_MOCK_DATA) {
+      return MOCK_READINGS[MOCK_READINGS.length - 1];
+    }
 
-    // --- FIREBASE VERSION (uncomment + adapt when backend is ready) ---
-    // const snapshot = await firebase.database()
-    //   .ref('readings')
-    //   .orderByChild('timestamp')
-    //   .limitToLast(1)
-    //   .once('value');
-    // const data = snapshot.val();
-    // return Object.values(data)[0];
+    const readingsRef = query(
+      ref(db, "readings"),
+      orderByChild("timestamp"),
+      limitToLast(1)
+    );
+    const snapshot = await get(readingsRef);
+    if (!snapshot.exists()) return null;
+
+    const data = snapshot.val();
+    return Object.values(data)[0];
   },
 
   // Returns an array of readings for the given range: "today" | "7days" | "30days"
@@ -38,17 +55,22 @@ const DataService = {
     const days = range === "today" ? 1 : range === "7days" ? 7 : 30;
     const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
 
-    // --- MOCK VERSION (current) ---
-    return MOCK_READINGS.filter(r => new Date(r.timestamp).getTime() >= cutoff);
+    if (USE_MOCK_DATA) {
+      return MOCK_READINGS.filter(r => new Date(r.timestamp).getTime() >= cutoff);
+    }
 
-    // --- FIREBASE VERSION (uncomment + adapt when backend is ready) ---
-    // const snapshot = await firebase.database()
-    //   .ref('readings')
-    //   .orderByChild('timestamp')
-    //   .startAt(new Date(cutoff).toISOString())
-    //   .once('value');
-    // const data = snapshot.val() || {};
-    // return Object.values(data);
+    const readingsRef = query(
+      ref(db, "readings"),
+      orderByChild("timestamp"),
+      startAt(new Date(cutoff).toISOString())
+    );
+    const snapshot = await get(readingsRef);
+    if (!snapshot.exists()) return [];
+
+    const data = snapshot.val();
+    return Object.values(data).sort(
+      (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
+    );
   },
 
   // Simple device "online" check — true if last reading was within 15 minutes
@@ -60,3 +82,5 @@ const DataService = {
   }
 
 };
+
+export default DataService;
