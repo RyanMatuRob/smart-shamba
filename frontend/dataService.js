@@ -39,7 +39,7 @@ const DataService = {
     }
 
     const readingsRef = query(
-      ref(db, "readings"),
+      ref(db, "live_data"),
       orderByChild("timestamp"),
       limitToLast(1)
     );
@@ -60,7 +60,7 @@ const DataService = {
     }
 
     const readingsRef = query(
-      ref(db, "readings"),
+      ref(db, "live_data"),
       orderByChild("timestamp"),
       startAt(new Date(cutoff).toISOString())
     );
